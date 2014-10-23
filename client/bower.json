@@ -1,0 +1,10 @@
+{
+  "name": "Todo",
+  "version": "1.0.0",
+  "dependencies": {
+    "ember": "~1.7",    
+    "bootstrap": "latest",
+    "moment": "latest",
+    "showdown": "latest"
+  }
+}

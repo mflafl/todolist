@@ -1,0 +1,20 @@
+{
+    "name": "todo-server",
+    "version": "0.0.1",
+    "author": {
+        "name": "Ivan Tsigankov",
+        "email": "ivan.tsigankov@gmail.com"
+    },
+    "description": "Server for todo application.",
+    "contributors": [
+        {
+            "name": "Ivan Tsigankov",
+            "email": "ivan.tsigankov@gmail.com"
+        }
+    ],
+    "dependencies": {
+        "express": "latest",        
+        "mongoose": "latest",
+        "async": "latest"
+    }
+}
