@@ -28,13 +28,20 @@ App.ItemsRoute = Ember.Route.extend({
 
 App.ItemsCreateRoute = Ember.Route.extend({
   model: function() {
-    console.log('create route');
-    var item = {
-      title: 'Untitled',
-      body: 'Test'
+    return {
+      title: 'Rails is Omakase',
+      body: 'Lorem ipsum'
+    };
+  }
+});
+
+App.ItemsCreateController = Ember.ObjectController.extend({
+  actions: {
+    create: function() {
+      console.log(this.model);
+      var item = this.store.createRecord('item', this.model)
+      item.save();
     }
-    items.push(item);
-    return item;
   }
 });
 
