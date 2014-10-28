@@ -16,13 +16,13 @@ App.Router.map(function() {
 
 App.ItemRoute = Ember.Route.extend({
   model: function(params) {
-    return posts.findBy('id', params.item_id);
+    return this.store.find('item', params.item_id);
   }
 });
 
 App.ItemsRoute = Ember.Route.extend({
   model: function() {
-    this.store.find('item');
+    return this.store.find('item');
   }
 });
 
@@ -38,7 +38,6 @@ App.ItemsCreateRoute = Ember.Route.extend({
 App.ItemsCreateController = Ember.ObjectController.extend({
   actions: {
     create: function() {
-      console.log(this.model);
       var item = this.store.createRecord('item', this.model)
       item.save();
     }
@@ -63,6 +62,7 @@ App.ItemController = Ember.ObjectController.extend({
     },
     doneEditing: function() {
       this.set('isEditing', false);
+      this.model.save();
     }
   }
 });

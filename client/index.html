@@ -28,17 +28,17 @@
       <div class="list-group">
         {{#each model}}
         {{#link-to 'item' this class='list-group-item'}}
-          {{title}}          
+          {{title}}
         {{/link-to}}
         {{/each}}
          {{#link-to 'items.create'}}
          <span class="glyphicon glyphicon-plus"></span>
-         {{/link-to}}        
+         {{/link-to}}
       </div>
       {{outlet}}
     </script>
     <!--/list-->
-    
+
     <!-- item create -->
     <script type="text/x-handlebars" id="items/create">
       <p><label>{{input type="text" value=title}}</label></p>
@@ -46,8 +46,6 @@
       <button {{action 'create'}}>Create</button>
     </script>
     <!-- /item create -->
-    
-    
 
     <script type="text/x-handlebars" id="item">
       {{#if isEditing}}

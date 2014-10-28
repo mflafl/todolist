@@ -4,7 +4,8 @@ var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
 var TodoItemSchema = new Schema({
-	name: String
+	title: String,
+	body: String
 });
 
 module.exports = mongoose.model('TodoItem', TodoItemSchema);

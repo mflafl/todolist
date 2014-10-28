@@ -9,7 +9,9 @@ mongoose.connect(config['db-url']); // connect to our database
 var TodoItem = require('./model/TodoItem');
 
 var app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 
 
@@ -19,11 +21,11 @@ var router = express.Router();
 router.use(function(req, res, next) {
     // do logging
     console.log('Something is happening.');
+
     // allow CORS
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");    
-    
-    
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
     next(); // make sure we go to the next routes and don't stop here
 });
 
@@ -31,8 +33,8 @@ router.route('/items')
 
 .post(function(req, res) {
     var item = new TodoItem(); // create a new instance of the TodoItem model
-    item.title = req.body.title; // set the items name (comes from the request)
-    item.body = req.body.title;
+    item.title = req.body.item.title; // set the items name (comes from the request)
+    item.body = req.body.item.body;
 
     // save the item and check for errors
     item.save(function(err) {
@@ -40,17 +42,19 @@ router.route('/items')
             res.send(err);
 
         res.json({
-            message: 'TodoItem created!'
+            item: item
         });
     });
 
 })
-.get(function(req, res) {
+    .get(function(req, res) {
     TodoItem.find(function(err, items) {
         if (err)
             res.send(err);
 
-        res.json(items);
+        res.json({
+            items: items
+        });
     });
 });
 
@@ -69,7 +73,9 @@ router.route('/items/:item_id')
 
 // update the item with this id (accessed at PUT http://localhost:8080/api/items/:item_id)
 .put(function(req, res) {
-
+    console.log('PUT!!');
+    console.log(req.params);
+    console.log(req.body);
     // use our item model to find the item we want
     TodoItem.findById(req.params.item_id, function(err, item) {
 
