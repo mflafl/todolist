@@ -63,6 +63,10 @@ App.ItemController = Ember.ObjectController.extend({
     doneEditing: function() {
       this.set('isEditing', false);
       this.model.save();
+    },
+    remove: function() {
+      this.model.deleteRecord();
+      this.model.save();
     }
   }
 });
