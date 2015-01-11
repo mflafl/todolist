@@ -92,14 +92,12 @@ router.route('/items/:item_id')
 
     item.title = req.body.item.title; // update the items info
     item.body = req.body.item.body;
+    item.done = req.body.item.done;
 
     // save the item
     item.save(function(err) {
       if (err)
         res.send(err);
-
-      console.log(this);
-      console.log(item);
 
       res.json({
         item: item

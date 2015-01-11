@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 
 var TodoItemSchema = new Schema({
   title: String,
-  body: String
+  body: String,
+  done: {type: Boolean, default: false }
 });
 
 module.exports = mongoose.model('TodoItem', TodoItemSchema);

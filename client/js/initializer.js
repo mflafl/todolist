@@ -9,7 +9,8 @@ var attr = DS.attr;
 
 App.Item = DS.Model.extend({
   title: attr(),
-  body: attr()
+  body: attr(),
+  done: attr()
 });
 
 App.ApplicationAdapter = DS.RESTAdapter.extend({

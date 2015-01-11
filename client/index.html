@@ -8,36 +8,50 @@
   </head>
   <body>
 
-    <!--header-->
-    <script type="text/x-handlebars">
-      <nav class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <a class='navbar-brand'>
-              Test
-            </a>
-          </div>
-        </div>
-      </nav>
-      {{ outlet }}
-    </script>
-    <!--/header-->
-
     <!-- items list -->
     <script id="items" type="text/x-handlebars">
       <div class="list-group">
         {{#each model}}
-        {{#link-to 'item' this class='list-group-item'}}
+        {{#link-to 'item' this class='list-group-item' classBinding='done:done:not-done'}}
           {{title}}
+          {{#unless done}}
+            <a title="Mark done!" href="#" {{action 'makeDone' this}}><span class="glyphicon glyphicon-ok"></span></a>
+          {{/unless}}
         {{/link-to}}
         {{/each}}
-         {{#link-to 'items.create'}}
-         <span class="glyphicon glyphicon-plus"></span>
-         {{/link-to}}
       </div>
       {{outlet}}
     </script>
     <!--/list-->
+
+    <!--header-->
+    <script type="text/x-handlebars">
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="container-fluid">
+            <div class="navbar-header">
+                {{#link-to 'index' class='navbar-brand'}}
+                  TodoList
+                {{/link-to}}
+                <ul class="nav navbar-nav">
+                  <li>
+                      {{#link-to 'items.create'}}
+                      <span class="glyphicon glyphicon-plus"></span>
+                      {{/link-to}}
+                  </li>
+                </ul>
+            </div>
+          </div>
+        </nav>
+        {{ outlet }}
+        <div class="footer navbar-default navbar-fixed-bottom text-center">
+            <p>&copy; 2015</p>
+        </div>
+    </script>
+    <!--/header-->
+
+
+
+
 
     <!-- item create -->
     <script type="text/x-handlebars" id="items/create">
@@ -65,7 +79,7 @@
     </script>
 
     <script type="text/x-handlebars" id="item/edit">
-      <p>{{input type="text" value=title}}</p>      
+      <p>{{input type="text" value=title}}</p>
       <p>{{textarea value=body}}</p>
     </script>
 
