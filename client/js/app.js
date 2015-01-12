@@ -8,6 +8,21 @@
         });
     });
 
+    App.ApplicationRoute = Ember.Route.extend({
+        model: function() {
+            return this.store.find('item');
+        },
+    });
+
+    App.ApplicationController = Ember.ObjectController.extend({
+        actions: {
+            makeDone: function(model) {
+                model.set('done', true);
+                model.save();
+            }
+        }
+    });
+
 
     App.ItemRoute = Ember.Route.extend({
         model: function(params) {
@@ -16,9 +31,9 @@
     });
 
     App.ItemsRoute = Ember.Route.extend({
-        model: function() {
+        /*model: function() {
             return this.store.find('item');
-        }
+        }*/
     });
 
     App.ItemsCreateRoute = Ember.Route.extend({
@@ -58,17 +73,6 @@
     });
 
 
-    App.ItemsController = Ember.ObjectController.extend({
-        actions: {
-            makeDone: function(model) {
-                model.set('done', true);
-                model.save();
-            }
-        }
-    });
-
-
-
     // helpers
     var showdown = new Showdown.converter();
 
@@ -83,6 +87,6 @@
     // index route config
     App.IndexRoute = Ember.Route.extend({
         beforeModel: function() {
-            this.transitionTo('items');
+            //this.transitionTo('items');
         }
     });

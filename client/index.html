@@ -1,31 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <html>
-  <head>
-    <title>Todo list</title>
-    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body>
-
-    <!-- items list -->
-    <script id="items" type="text/x-handlebars">
-        {{outlet}}
-        <div class="list-group">
-          {{#each model}}
-              {{#link-to 'item' this class='list-group-item' classBinding='done:list-group-item-success:not-done'}}
-                  {{ title }}
-                  {{#unless done}}
-                      <a class="btn btn-default" title="Mark done!" href="#" {{action 'makeDone' this}}><span class="glyphicon glyphicon-ok"></span></a>                    
-                  {{/unless}}          
-                  <span class="badge">
-                        {{ format-date created }}
-                  </span>
-              {{/link-to}}
-          {{/each}}
-        </div>      
-    </script>
-    <!--/list-->
+    <head>
+        <title>Todo list</title>
+        <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
 
     <!--header-->
     <script type="text/x-handlebars">
@@ -45,24 +26,49 @@
             </div>
           </div>
         </nav>
-        {{ outlet }}
+        <div class="row">
+                <div class="col-md-4">{{partial 'items'}}</div>
+                <div class="col-md-4">{{ outlet }}</div>
+                <div class="col-md-4"></div>
+        </div>
         <div class="footer navbar-default navbar-fixed-bottom text-center">
             <p>&copy; 2015</p>
         </div>
     </script>
     <!--/header-->
 
+
+    <!-- items list -->
+    <script id="items" type="text/x-handlebars">
+        <div class="list-group">
+          {{#each model}}
+              {{#link-to 'item' this class='list-group-item' classBinding='done:list-group-item-success:not-done'}}
+                  {{ title }}
+                  {{#unless done}}
+                      <a class="btn btn-default" title="Mark done!" href="#" {{action 'makeDone' this}}><span class="glyphicon glyphicon-ok"></span></a>
+                  {{/unless}}
+                  <span class="badge">
+                        {{ format-date created }}
+                  </span>
+              {{/link-to}}
+          {{/each}}
+        </div>
+    </script>
+    <!--/list-->
+
+
+
     <!-- item create -->
     <script type="text/x-handlebars" id="items/create">
         <div class="panel panel-default">
             <div class="panel-heading">Create note</div>
-            <div class="panel-body">                
+            <div class="panel-body">
                 {{input type="text" class='form-control' value=title}}
                 {{textarea class='form-control' value=body}}
                 <button class="btn btn-default" {{action 'create'}}>Create</button>
-            </div>                        
-        </div>        
-      
+            </div>
+        </div>
+
     </script>
     <!-- /item create -->
 
@@ -79,7 +85,7 @@
       {{else}}
         <button class="btn btn-default" {{action 'edit'}}>Edit</button>
         <button class="btn btn-default" {{action 'remove'}}>Remove</button>
-      {{/if}}      
+      {{/if}}
     </script>
 
     <script type="text/x-handlebars" id="item/edit">
