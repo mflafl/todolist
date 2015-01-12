@@ -1,8 +1,8 @@
 {
   "name": "Todo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
-    "ember": "1.7",
+    "ember": "1.9.1",
     "ember-data": "master",
     "bootstrap": "latest",
     "moment": "latest",

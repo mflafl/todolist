@@ -10,7 +10,10 @@ var attr = DS.attr;
 App.Item = DS.Model.extend({
   title: attr(),
   body: attr(),
-  done: attr()
+  done: attr(),
+  doneAt: attr(),
+  created: attr(),
+  updated: attr()
 });
 
 App.ApplicationAdapter = DS.RESTAdapter.extend({
