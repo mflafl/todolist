@@ -1,11 +1,24 @@
 
     App.Router.map(function() {
-        this.resource('items', function() {
-            this.resource('item', {
-                path: ':item_id'
-            });
-            this.route('create');
-        });
+        this.route('item', { path: '/item/:item_id'});
+        this.route('items.create', { path: '/items/create'});
+    });
+    
+    App.ItemController = Ember.ObjectController.extend({
+        isEditing: false,
+        actions: {
+            edit: function() {
+                this.set('isEditing', true);
+            },
+            doneEditing: function() {
+                this.set('isEditing', false);
+                this.model.save();
+            },
+            remove: function() {
+                this.model.deleteRecord();
+                this.model.save();
+            },
+        }
     });
 
     App.ApplicationRoute = Ember.Route.extend({
@@ -38,39 +51,24 @@
 
     App.ItemsCreateRoute = Ember.Route.extend({
         model: function() {
-            return {
-                title: 'Title',
-                body: 'Body'
-            };
+            return this.store.createRecord('item', {title: 'Untitled'});
         }
     });
 
     App.ItemsCreateController = Ember.ObjectController.extend({
         actions: {
             create: function() {
-                var item = this.store.createRecord('item', this.model)
-                item.save();
+                this.model.save();
+            },
+            cancel: function() {
+                this.model.deleteRecord();
+                window.history.back();
             }
         }
     });
 
 
-    App.ItemController = Ember.ObjectController.extend({
-        isEditing: false,
-        actions: {
-            edit: function() {
-                this.set('isEditing', true);
-            },
-            doneEditing: function() {
-                this.set('isEditing', false);
-                this.model.save();
-            },
-            remove: function() {
-                this.model.deleteRecord();
-                this.model.save();
-            },
-        }
-    });
+
 
 
     // helpers

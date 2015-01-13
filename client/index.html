@@ -28,8 +28,7 @@
         </nav>
         <div class="row">
                 <div class="col-md-4">{{partial 'items'}}</div>
-                <div class="col-md-4">{{ outlet }}</div>
-                <div class="col-md-4"></div>
+                {{ outlet }}
         </div>
         <div class="footer navbar-default navbar-fixed-bottom text-center">
             <p>&copy; 2015</p>
@@ -44,12 +43,14 @@
           {{#each model}}
               {{#link-to 'item' this class='list-group-item' classBinding='done:list-group-item-success:not-done'}}
                   {{ title }}
-                  {{#unless done}}
-                      <a class="btn btn-default" title="Mark done!" href="#" {{action 'makeDone' this}}><span class="glyphicon glyphicon-ok"></span></a>
-                  {{/unless}}
                   <span class="badge">
                         {{ format-date created }}
                   </span>
+                  {{#unless done}}
+                  <span title="Mark done!" class="badge">
+                        <span {{action 'makeDone' this}}class="glyphicon glyphicon-ok"></span>
+                  </span>
+                  {{/unless}}                  
               {{/link-to}}
           {{/each}}
         </div>
@@ -57,36 +58,42 @@
     <!--/list-->
 
 
+    <!-- item single -->
+    <script type="text/x-handlebars" id="item">
+        <div class="col-md-4">
+            <h1>{{title}}</h1>
+            <small class='muted'>({{format-date created}})</small>
+            <hr>
+            <div class='below-the-fold'>
+            {{format-markdown body}}
+            </div>
+            {{#if isEditing}}
+              {{partial 'item/edit'}}
+              <button class="btn btn-default" {{action 'doneEditing'}}>Done</button>
+            {{else}}
+              <button class="btn btn-default" {{action 'edit'}}>Edit</button>
+              <button class="btn btn-default" {{action 'remove'}}>Remove</button>
+            {{/if}}
+        </div>
+        {{ outlet }}
+    </script>
+    <!-- /item single -->
 
     <!-- item create -->
     <script type="text/x-handlebars" id="items/create">
-        <div class="panel panel-default">
-            <div class="panel-heading">Create note</div>
-            <div class="panel-body">
-                {{input type="text" class='form-control' value=title}}
-                {{textarea class='form-control' value=body}}
-                <button class="btn btn-default" {{action 'create'}}>Create</button>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">Create note</div>
+                <div class="panel-body">
+                    {{input type="text" class='form-control' value=title}}
+                    {{textarea class='form-control' value=body}}
+                    <button class="btn btn-default" {{action 'create'}}>Create</button>
+                    <button class="btn btn-default" {{action 'cancel'}}>Cancel</button>
+                </div>
             </div>
         </div>
-
     </script>
     <!-- /item create -->
-
-    <script type="text/x-handlebars" id="item">
-      <h1>{{title}}</h1>
-      <small class='muted'>({{format-date created}})</small>
-      <hr>
-      <div class='below-the-fold'>
-      {{format-markdown body}}
-      </div>
-      {{#if isEditing}}
-        {{partial 'item/edit'}}
-        <button class="btn btn-default" {{action 'doneEditing'}}>Done</button>
-      {{else}}
-        <button class="btn btn-default" {{action 'edit'}}>Edit</button>
-        <button class="btn btn-default" {{action 'remove'}}>Remove</button>
-      {{/if}}
-    </script>
 
     <script type="text/x-handlebars" id="item/edit">
       {{input class='form-control' type="text" value=title}}
