@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var TodoItemSchema = new Schema({
+  revisions: [{type: Schema.Types.ObjectId, ref: 'TodoItemRevision'}],
   title: String,
   body: String,
   done: {type: Boolean, default: false },

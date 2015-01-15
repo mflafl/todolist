@@ -1,33 +1,43 @@
-var config = {
-  "apiBase": "http://localhost:8452",
-  "apiNameSpace": "api/v1"
-}
 
-App = Ember.Application.create({});
+    var App = Ember.Application.create();
 
-var attr = DS.attr;
+    App.Router.map(function() {
+        this.route('item', {
+            path: '/item/:item_id'
+        });
+        this.route('items.create', {
+            path: '/items/create'
+        });
+    });
 
-App.Item = DS.Model.extend({
-  title: attr(),
-  body: attr(),
-  done: attr(),
-  doneAt: attr(),
-  created: attr(),
-  updated: attr()
-});
+    Ember.$.getJSON('/config.json').then(function(data) {
+        var config = data;
+        var attr = DS.attr;
 
-App.ApplicationAdapter = DS.RESTAdapter.extend({
-  host: config.apiBase,
-  namespace: config.apiNameSpace,
-});
+        App.Item = DS.Model.extend({
+            title: attr(),
+            body: attr(),
+            done: attr(),
+            doneAt: attr(),
+            created: attr(),
+            updated: attr()
+        });
 
-App.ApplicationSerializer = DS.RESTSerializer.extend({
-  primaryKey: '_id'
-});
+        Ember.Application.initializer({
+            name: "configReader",
+            initialize: function(container, application) {
+                application.set('apiBase', config.apiBase);
+            }
+        });
 
-Ember.Application.initializer({
-  name: "configReader",
-  initialize: function(container, application) {
-    application.set('apiBase', config.apiBase);
-  }
-});
+        App.ApplicationAdapter = DS.RESTAdapter.extend({
+            host: config.apiBase,
+            namespace: config.apiNameSpace,
+        });
+
+        App.ApplicationSerializer = DS.RESTSerializer.extend({
+            primaryKey: '_id'
+        });
+
+        App.start(config);
+    });
