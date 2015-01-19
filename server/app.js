@@ -21,9 +21,6 @@ var router = express.Router();
 
 // middleware to use for all requests
 router.use(function(req, res, next) {
-    // do logging
-    console.log('Something is happening.');
-
     if (req.method === 'OPTIONS') {
         var headers = {};
         headers["Access-Control-Allow-Origin"] = "*";
@@ -80,7 +77,6 @@ router.route('/items/:item_id')
     TodoItem.findById(req.params.item_id, function(err, item) {
         if (err)
             res.send(err);
-        res.json(item);
     });
 })
 
@@ -149,9 +145,21 @@ router.get('/', function(req, res) {
     });
 });
 
+
+router.route('/items/:item_id/revisions')
+
+.get(function(req, res) {
+    TodoItemRevision.find({item: req.params.item_id}).sort({'created': -1})
+    .exec(function(err, items) {
+        if (err)
+            res.send(err);
+        res.json(items);
+    });
+});
+
+
 router.route('/items/revision/:revision_id')
 
-// get the item with that id (accessed at GET http://localhost:8080/api/items/:item_id)
 .get(function(req, res) {
     TodoItemRevision.findById(req.params.revision_id, function(err, item) {
         if (err)

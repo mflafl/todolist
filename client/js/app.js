@@ -20,6 +20,11 @@ App.start = function(config) {
                 controller.set('isEditing', true);
             }
             controller.set('model', model);
+            
+            var revisions = DS.PromiseArray.create({
+              promise: $.get(config.apiBase + '/' + config.apiNameSpace + '/' + 'items/' + model.get('id') + '/revisions')
+            });
+            controller.set('revisions', revisions);
         },
         model: function(params) {
             return this.store.find('item', params.item_id);
@@ -29,12 +34,9 @@ App.start = function(config) {
     App.ItemController = Ember.ObjectController.extend({
         isEditing: false,
         actions: {
-            revertToVersion: function(versionId) {
-                var model = this.model;
-                $.get(config.apiBase + '/' + config.apiNameSpace + '/' + 'items/revision/' + versionId, function(data) {
-                    model.set('body', data.body);
-                    model.set('title', data.title);
-                });
+            revertToVersion: function(revision) {
+                this.model.set('body', revision.body);
+                this.model.set('title', revision.title); 
             },
             edit: function() {
                 this.set('isEditing', true);
