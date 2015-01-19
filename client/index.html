@@ -58,13 +58,24 @@
 
         <!-- item single -->
         <script type="text/x-handlebars" id="item">
-            <a title="History" {{action 'remove' this}} href="#"><span class="glyphicon glyphicon-hdd"></span></a>
             {{#if isEditing}}
                 <div class="col-md-4">
                     {{partial 'item/edit'}}
                 </div>
             {{/if}}
             <div class="col-md-4">
+
+            <div class="pull-right dropdown">
+              <a title="History" href="#" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                <span class="glyphicon glyphicon-hdd"></span>
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">                
+                {{#each id in revisions }}                
+                    <li role="presentation"><a {{action 'revertToVersion' id}} role="menuitem" tabindex="-1" href="#">{{ id }}</a></li>
+                {{/each}}
+              </ul>
+            </div>
                 {{#unless isEditing}}
                     <a title="Edit" {{action 'edit' this}} href="#"><span class="glyphicon glyphicon-edit"></span></a>
                     <a title="Remove" {{action 'remove' this}} href="#"><span class="glyphicon glyphicon-remove"></span></a>

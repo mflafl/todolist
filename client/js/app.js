@@ -1,5 +1,4 @@
 App.start = function(config) {
-    console.log(config);
     App.ItemsCreateRoute = Ember.Route.extend({
         setupController: function(controller, model) {
             this.controllerFor('item').set('isEditing', true);
@@ -30,6 +29,13 @@ App.start = function(config) {
     App.ItemController = Ember.ObjectController.extend({
         isEditing: false,
         actions: {
+            revertToVersion: function(versionId) {
+                var model = this.model;
+                $.get(config.apiBase + '/' + config.apiNameSpace + '/' + 'items/revision/' + versionId, function(data) {
+                    model.set('body', data.body);
+                    model.set('title', data.title);
+                });
+            },
             edit: function() {
                 this.set('isEditing', true);
             },

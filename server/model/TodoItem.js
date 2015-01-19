@@ -11,6 +11,10 @@ var TodoItemSchema = new Schema({
   created: { type: Date, default: Date.now },
   updated: Date,
   doneAt: Date,
+},
+{
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
 });
 
 TodoItemSchema.pre('save', function(next) {
@@ -20,6 +24,10 @@ TodoItemSchema.pre('save', function(next) {
     this.doneAt = now;
   }
   next();
+});
+
+TodoItemSchema.virtual('version').get(function() {
+  return this.revisions[this.revisions.length - 1];
 });
 
 module.exports = mongoose.model('TodoItem', TodoItemSchema);

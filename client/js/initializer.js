@@ -20,7 +20,9 @@
             done: attr(),
             doneAt: attr(),
             created: attr(),
-            updated: attr()
+            updated: attr(),
+            revisions: attr(),
+            version: attr()
         });
 
         Ember.Application.initializer({

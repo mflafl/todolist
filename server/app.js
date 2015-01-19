@@ -60,7 +60,7 @@ router.route('/items')
     });
 
 })
-    .get(function(req, res) {
+.get(function(req, res) {
     TodoItem.find(function(err, items) {
         if (err)
             res.send(err);
@@ -100,12 +100,23 @@ router.route('/items/:item_id')
         itemRevision.body = item.body;
         itemRevision.item = item.id;
 
-        itemRevision.save(function(err) {
-            if (err)
-                res.send(err);
+        if (item.isModified('title') || item.isModified('body')) {
+            itemRevision.save(function(err) {
+                if (err)
+                    res.send(err);
 
-            item.revisions.push(itemRevision.id);
+                item.revisions.push(itemRevision.id);
 
+                item.save(function(err) {
+                    if (err)
+                        res.send(err);
+
+                    res.json({
+                        item: item
+                    });
+                });
+            });
+        } else {
             item.save(function(err) {
                 if (err)
                     res.send(err);
@@ -114,7 +125,8 @@ router.route('/items/:item_id')
                     item: item
                 });
             });
-        });
+        }
+
     });
 })
 
@@ -136,6 +148,17 @@ router.get('/', function(req, res) {
         message: 'hooray! welcome to our api!'
     });
 });
+
+router.route('/items/revision/:revision_id')
+
+// get the item with that id (accessed at GET http://localhost:8080/api/items/:item_id)
+.get(function(req, res) {
+    TodoItemRevision.findById(req.params.revision_id, function(err, item) {
+        if (err)
+            res.send(err);
+        res.json(item);
+    });
+})
 
 app.use('/api/v1', router);
 

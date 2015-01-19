@@ -1,0 +1,9 @@
+#PhpStorm
+.idea
+
+client/vendor/*
+server/node_modules/*
+
+#Tmp
+*.php~
+*.orig
