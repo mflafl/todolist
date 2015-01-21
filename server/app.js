@@ -5,17 +5,18 @@ var bodyParser = require('body-parser');
 var async = require('async');
 
 var mongoose = require('mongoose');
-mongoose.connect(config['db-url']); // connect to our database
+mongoose.connect(config['db-url']);
 
-var TodoItem = require('./model/TodoItem');
-var TodoItemRevision = require('./model/TodoItemRevision');
+var TodoItem = require('./model/TodoItem/TodoItem');
+var TodoItemRevision = require('./model/TodoItem/TodoItemRevision');
+var Category = require('./model/Category');
+var Tag = require('./model/Tag');
 
 var app = express();
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-
 
 var router = express.Router();
 
@@ -61,9 +62,8 @@ router.route('/items')
     TodoItem.find(function(err, items) {
         if (err)
             res.send(err);
-
         res.json({
-            items: items
+            items: items,
         });
     });
 });
@@ -90,6 +90,7 @@ router.route('/items/:item_id')
         item.title = req.body.item.title; // update the items info
         item.body = req.body.item.body;
         item.done = req.body.item.done;
+        item.category = req.body.item.category;
 
         var itemRevision = new TodoItemRevision();
         itemRevision.title = item.title;
@@ -157,7 +158,6 @@ router.route('/items/:item_id/revisions')
     });
 });
 
-
 router.route('/items/revision/:revision_id')
 
 .get(function(req, res) {
@@ -168,7 +168,44 @@ router.route('/items/revision/:revision_id')
     });
 })
 
+router.route('/categories')
+    .post(function(req, res) {
+        var item = new Category();
+        item.title = req.body.category.title;
+        item.save(function(err) {
+            if (err)
+                res.send(err);
+
+            res.json({
+                category: item
+            });
+        });
+
+    })
+    .get(function(req, res) {
+        Category.find(function(err, items) {
+            if (err)
+                res.send(err);
+            res.json({
+                categories: items,
+            });
+        });
+    });
+
+
+router.route('/tags')
+    .get(function(req, res) {
+        Tag.find(function(err, items) {
+            if (err)
+                res.send(err);
+            res.json({
+                tags: items,
+            });
+        });
+    });
+
 app.use('/api/v1', router);
 
 app.listen(config.port);
 console.log('Server started at: ' + config.port);
+

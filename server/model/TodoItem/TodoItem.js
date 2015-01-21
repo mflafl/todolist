@@ -5,6 +5,8 @@ var Schema = mongoose.Schema;
 
 var TodoItemSchema = new Schema({
   revisions: [{type: Schema.Types.ObjectId, ref: 'TodoItemRevision'}],
+  tags: [{type: Schema.Types.ObjectId, ref: 'Tag'}],
+  category: {type: Schema.Types.ObjectId, ref: 'Category'},
   title: String,
   body: String,
   done: {type: Boolean, default: false },
@@ -17,14 +19,24 @@ var TodoItemSchema = new Schema({
   toJSON: { virtuals: true }
 });
 
+
+
+TodoItemSchema.path('done').set(function (newVal) {
+  var originalVal = this.done;
+  if (originalVal===false && newVal===true) {
+    this.markedAsDone = true;
+  }
+  return newVal;
+});
+
 TodoItemSchema.pre('save', function(next) {
   now = new Date();
   this.updated = now;
-  if (this.done) {
+  if (this.markedAsDone) {
     this.doneAt = now;
   }
   next();
-});
+})
 
 TodoItemSchema.virtual('version').get(function() {
   return this.revisions[this.revisions.length - 1];

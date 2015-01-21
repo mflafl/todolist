@@ -1,11 +1,13 @@
 {
-  "name": "Todo",
-  "version": "1.0.1",
-  "dependencies": {
-    "ember": "1.9.1",
-    "ember-data": "master",
-    "bootstrap": "latest",
-    "moment": "latest",
-    "showdown": "latest"
-  }
+    "name": "Todo",
+    "version": "1.0.1",
+    "dependencies": {
+        "ember": "1.9.1",
+        "ember-data": "master",
+        "bootstrap": "latest",
+        "bootstrap-tagsinput": "latest",
+        "moment": "latest",
+        "showdown": "latest",
+        "typeahead.js": "latest"
+    }
 }

@@ -1,8 +1,4 @@
 {
   "apiBase": "http://localhost:8452",
-  "apiNameSpace": "api/v1",
-  "defaultItem": {
-    "title": "Untitled",
-    "body": ""
-  }
+  "apiNameSpace": "api/v1"
 }

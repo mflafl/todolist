@@ -1,11 +1,25 @@
+
 App.start = function(config) {
-    App.ItemsCreateRoute = Ember.Route.extend({
+
+    this.Router.map(function() {
+        this.route('item', {
+            path: '/item/:item_id'
+        });
+        this.route('items.create', {
+            path: '/items/create'
+        });
+        this.resource('categories', function() {
+            this.route('create')
+        });
+    });
+
+    this.ItemsCreateRoute = Ember.Route.extend({
         setupController: function(controller, model) {
             this.controllerFor('item').set('isEditing', true);
         },
         model: function() {
             var self = this;
-            var model = this.store.createRecord('item', config.defaultItem);
+            var model = this.store.createRecord('item');
             model.save().then(function() {
                 self.transitionTo('item', model.id);
             });
@@ -13,30 +27,31 @@ App.start = function(config) {
         }
     });
 
-    App.ItemRoute = Ember.Route.extend({
+    this.ItemRoute = Ember.Route.extend({
         setupController: function(controller, model) {
             controller.set('isEditing', false);
             if (model.get('body') === '') {
                 controller.set('isEditing', true);
             }
             controller.set('model', model);
-            
+
             var revisions = DS.PromiseArray.create({
-              promise: $.get(config.apiBase + '/' + config.apiNameSpace + '/' + 'items/' + model.get('id') + '/revisions')
+                promise: $.get(config.apiBase + '/' + config.apiNameSpace + '/' + 'items/' + model.get('id') + '/revisions')
             });
-            controller.set('revisions', revisions);
+            controller.set('revisionsData', revisions);
+            controller.set('categories', this.store.all('category'));
         },
         model: function(params) {
             return this.store.find('item', params.item_id);
         },
     });
 
-    App.ItemController = Ember.ObjectController.extend({
+    this.ItemController = Ember.ObjectController.extend({
         isEditing: false,
         actions: {
             revertToVersion: function(revision) {
                 this.model.set('body', revision.body);
-                this.model.set('title', revision.title); 
+                this.model.set('title', revision.title);
             },
             edit: function() {
                 this.set('isEditing', true);
@@ -56,28 +71,23 @@ App.start = function(config) {
         }
     });
 
-    App.ApplicationRoute = Ember.Route.extend({
-        model: function() {
-            return this.store.find('item');
-        },
-    });
 
-    App.ApplicationController = Ember.ObjectController.extend({
-        actions: {
-            makeDone: function(model) {
-                model.set('done', true);
-                model.save();
-            }
+    this.CategoriesCreateRoute = Ember.Route.extend({
+        model: function() {
+            return this.store.createRecord('category');
         }
     });
 
-    var showdown = new Showdown.converter();
-
-    Ember.Handlebars.helper('format-markdown', function(input) {
-        return new Handlebars.SafeString(showdown.makeHtml(input));
-    });
-
-    Ember.Handlebars.helper('format-date', function(date) {
-        return moment(date).fromNow();
+    this.CategoriesCreateController = Ember.ObjectController.extend({
+        actions: {
+            save: function() {                
+                this.model.save();
+                this.transitionTo('index');
+            },
+            cancel: function() {
+                this.model.deleteRecord();
+                this.transitionTo('index');
+            }
+        }
     });
 }
