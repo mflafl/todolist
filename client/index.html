@@ -26,7 +26,7 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Category <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     {{#if categories }}
-                                        {{#each category in categories }}
+                                        {{#each categories as |category| }}
                                             {{#if category.items }}
                                                 <li><a href="#">{{ category.title }}</a></li>
                                             {{/if}}
@@ -60,17 +60,17 @@
                 <a class="list-group-item success disabled">
                     Items
                 </a>
-                {{#each item in items }}
+                {{#each items as |item| }}
                     {{#unless item.category}}
                         {{partial 'itemListItem'}}
                     {{/unless}}
                 {{/each}}
-                {{#each cat in categories}}
+                {{#each categories as |cat| }}
                     {{#if cat.items }}
                         <a class="list-group-item success disabled">
                             {{ cat.title }}
                         </a>
-                        {{#each item in cat.items }}
+                        {{#each cat.items as |item| }}
                             {{partial 'itemListItem'}}
                         {{/each}}
                     {{/if}}
@@ -89,7 +89,7 @@
                 </span>
                 {{#unless item.done}}
                 <span title="Mark done!" class="badge">
-                      <span {{action 'makeDone' item}}class="glyphicon glyphicon-ok"></span>
+                    <span {{action 'makeDone' item}}class="glyphicon glyphicon-ok"></span>
                 </span>
                 {{/unless}}
             {{/link-to}}
@@ -111,7 +111,7 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            {{#each revision in revisionsData }}
+                            {{#each revisionsData as |revision| }}
                                 <li role="presentation"><a title="Revert to this version"{{action 'revertToVersion' revision}} role="menuitem" tabindex="-1" href="#">{{ format-date revision.created }}</a></li>
                             {{/each}}
                         </ul>
@@ -139,6 +139,7 @@
                     <p>Category: {{ category.title }}</p>
                 {{/if}}
                 {{/unless}}
+                {{ view "tagsInput" }}
             </div>
         </script>
         <!-- /item single page -->
@@ -183,13 +184,15 @@
         <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="vendor/typeahead.js/dist/typeahead.bundle.js"></script>
         <script src="vendor/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
-        <script type="text/javascript" src="vendor/handlebars/handlebars.js"></script>
-        <script type="text/javascript" src="vendor/moment/moment.js"></script>
-        <script type="text/javascript" src="vendor/showdown/src/showdown.js"></script>
-        <script type="text/javascript" src="vendor/ember/ember.js"></script>
-        <script type="text/javascript" src="http://builds.emberjs.com/canary/ember-data.prod.js"></script>
-        <script type="text/javascript" src="js/initializer.js"></script>
-        <script type="text/javascript" src="js/app.js"></script>
-        <script type="text/javascript" src="js/helpers.js"></script>
+        <script src="vendor/moment/moment.js"></script>
+        <script src="vendor/showdown/dist/showdown.js"></script>
+
+        <script src="http://builds.emberjs.com/tags/v1.13.2/ember-template-compiler.js"></script>
+        <script src="http://builds.emberjs.com/tags/v1.13.2/ember.prod.js"></script>
+        <script src="http://builds.emberjs.com/release/ember-data.js"></script>
+
+        <script src="js/initializer.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/helpers.js"></script>
     </body>
 </html>

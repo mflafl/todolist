@@ -1,5 +1,22 @@
-
 App.start = function(config) {
+
+    this.TagsInputView = Ember.View.extend({
+        tagName: 'input',
+        classNames: ['form-control'],
+        didInsertElement: function() {
+            this.$().tagsinput({
+                //itemValue: 'id',
+                //itemText: 'title',
+                typeaheadjs: {
+                    name: 'tags',
+                    //displayKey: 'title',
+                    source: function() {
+                        return ['tag1', 'tag2']
+                    }
+                }
+            })
+        }
+    });
 
     this.Router.map(function() {
         this.route('item', {
@@ -40,6 +57,23 @@ App.start = function(config) {
             });
             controller.set('revisionsData', revisions);
             controller.set('categories', this.store.all('category'));
+
+            var tags = this.store.peekAll('tag').toArray();
+
+            /*$(document).ready(function() {
+                console.log($('#tagsInput'));
+                $('#tagsInput').tagsinput({
+                    itemValue: 'id',
+                    itemText: 'title',
+                    typeaheadjs: {
+                      name: 'tags',
+                      displayKey: 'title',
+                      source: function() {
+                        return ['tag1', 'tag2']
+                      }
+                    }
+                });
+            });*/
         },
         model: function(params) {
             return this.store.find('item', params.item_id);
@@ -80,7 +114,7 @@ App.start = function(config) {
 
     this.CategoriesCreateController = Ember.ObjectController.extend({
         actions: {
-            save: function() {                
+            save: function() {
                 this.model.save();
                 this.transitionTo('index');
             },

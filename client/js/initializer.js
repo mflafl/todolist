@@ -9,7 +9,9 @@ Ember.$.getJSON('/config.json').then(function(config) {
             defaultValue: ''
         }),
         tags: DS.hasMany('tags'),
-        category: DS.belongsTo('category' ,{async: false}),
+        category: DS.belongsTo('category', {
+            async: false
+        }),
         done: DS.attr(),
         doneAt: DS.attr(),
         created: DS.attr(),
@@ -48,26 +50,14 @@ Ember.$.getJSON('/config.json').then(function(config) {
     App.ApplicationRoute = Ember.Route.extend({
         model: function() {
             return Ember.RSVP.hash({
-              items: this.store.find('item'),
-              categories: this.store.find('category'),
-              tags: this.store.find('tag')
+                items: this.store.find('item'),
+                categories: this.store.find('category'),
+                tags: this.store.find('tag')
             });
         },
-        /*setupController: function(controller, model) {
+        setupController: function(controller, model) {
             controller.set("model", model);
-
-
-            if (model.items.toArray().length == 2) {
-                var val = true;
-            } else {
-                var val = false;
-            }
-
-            controller.set("hasUncategorized", true);
-
-            // do some controller setup here - can be omitted if no setup is needed
-            // this will run only after the promise has been resolved.
-        }*/
+        }
     });
 
     App.ApplicationController = Ember.ObjectController.extend({
@@ -75,10 +65,6 @@ Ember.$.getJSON('/config.json').then(function(config) {
             makeDone: function(model) {
                 model.set('done', true);
                 model.save();
-            },
-            switchNotebook: function() {
-
-
             }
         }
     });
