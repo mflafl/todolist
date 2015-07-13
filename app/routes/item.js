@@ -56,7 +56,7 @@ router.route('/items/:item_id')
   .exec(function(err, item) {
     if (err) res.send(err);
 
-    item.tags = [];
+    item.tagRefs = [];
     var tagsPlain = req.body.item.tagsPlain;
 
     async.forEach(tagsPlain, function(tagName, callback) {
