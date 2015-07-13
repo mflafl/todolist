@@ -1,7 +1,6 @@
 var config = require('./config/config.json');
 var express = require('express');
 var bodyParser = require('body-parser');
-var async = require('async');
 
 var itemRouter = require('./app/routes/item');
 var itemRevisionRouter = require('./app/routes/item_revision');
