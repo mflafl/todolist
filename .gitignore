@@ -2,7 +2,7 @@
 .idea
 
 client/vendor/*
-server/node_modules/*
+node_modules/*
 
 #Tmp
 *.php~

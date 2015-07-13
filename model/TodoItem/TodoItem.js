@@ -1,4 +1,3 @@
-
 // model/TodoItem.js
 
 var mongoose = require('mongoose');
@@ -63,14 +62,9 @@ TodoItemSchema.virtual('version').get(function() {
 });
 
 TodoItemSchema.virtual('tags').get(function() {
-  var result = [];  
+  var result = [];
   _.each(this.tagRefs, function(item) {
-    if (item.name) {
-      // id string dont have name property
-      result.push(item._id);
-    } else {
-      result.push(item);
-    }
+    result.push(item._id);
   });
   return result
 });
@@ -78,12 +72,9 @@ TodoItemSchema.virtual('tags').get(function() {
 TodoItemSchema.virtual('tagsPlain').get(function() {
   var result = [];
   _.each(this.tagRefs, function(item) {
-    if (item.name) {
-      result.push(item.name);
-    }
+    result.push(item.name);
   });
   return result;
 });
 
 module.exports = mongoose.model('TodoItem', TodoItemSchema);
-

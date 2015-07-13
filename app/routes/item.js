@@ -24,7 +24,7 @@ router.route('/items')
   });
 })
   .get(function(req, res) {
-  TodoItem.find(function(err, items) {
+  TodoItem.find().populate('tagRefs').exec(function(err, items) {
     if (err)
       res.send(err);
     res.json({
@@ -51,7 +51,9 @@ router.route('/items/:item_id')
 // update the item with this id (accessed at PUT http://localhost:8080/api/items/:item_id)
 .put(function(req, res) {
   // use our item model to find the item we want
-  TodoItem.findById(req.params.item_id, function(err, item) {
+  TodoItem.findById(req.params.item_id)
+  //.populate('tagRefs')
+  .exec(function(err, item) {
     if (err) res.send(err);
 
     item.tags = [];
@@ -80,45 +82,45 @@ router.route('/items/:item_id')
     }, function(err) {
       if (err) return next(err);
 
-      item.title = req.body.item.title; // update the items info
+      item.title = req.body.item.title;
       item.body = req.body.item.body;
       item.done = req.body.item.done;
       item.category = req.body.item.category;
 
-      var itemRevision = new TodoItemRevision();
-      itemRevision.title = item.title;
-      itemRevision.body = item.body;
-      itemRevision.item = item.id;
+      async.parallel([
+        function(callback) { //This is the second task, and callback is its callback task
+          if (item.isModified('title') || item.isModified('body')) {
+            var itemRevision = new TodoItemRevision();
+            itemRevision.title = item.title;
+            itemRevision.body = item.body;
+            itemRevision.item = item.id;
 
-      if (item.isModified('title') || item.isModified('body')) {
-        itemRevision.save(function(err) {
-          if (err) {
-            res.send(err);
+            itemRevision.save(function(err) {
+              if (err) res.send(err);
+              item.revisions.push(itemRevision.id);
+              callback();
+            });
+          } else {
+            callback();
           }
+        }
+      ], function(err) {
+        if (err) res.send(err);
 
-          item.revisions.push(itemRevision.id);
+        item.save(function(err) {
+          if (err) res.send(err);
 
-          item.save(function(err) {
-            if (err) {
-              res.send(err);
-            }
-
+          TodoItem.findById(req.params.item_id)
+            .populate('tagRefs')
+            .exec(function(err, item) {
+            if (err) res.send(err);
             res.json({
               item: item
             });
-          });
-        });
-      } else {
-        item.save(function(err) {
-          if (err) {
-            res.send(err);
-          }
 
-          res.json({
-            item: item
           });
         });
-      }
+      });
     });
   });
 })
@@ -127,10 +129,7 @@ router.route('/items/:item_id')
   TodoItem.remove({
     _id: req.params.item_id
   }, function(err, item) {
-    if (err) {
-      res.send(err);
-    }
-
+    if (err) res.send(err);
     res.status(204).end();
   });
 });
