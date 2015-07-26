@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
+var sleep = require('sleep');
 
 // middleware to use for all requests
 router.use(function(req, res, next) {
-  if (req.method === 'OPTIONS') {
+  sleep.sleep(1);
+  if (req.method === 'OPTIONS') {    
     var headers = {};
     headers["Access-Control-Allow-Origin"] = "*";
     headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";

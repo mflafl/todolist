@@ -16,6 +16,8 @@
     "mongoose": "latest",
     "async": "latest",
     "body-parser": "latest",
-    "underscore": "latest"
+    "underscore": "latest",
+    //TODO: make dev dependencies
+    "sleep": "latest"
   }
 }
