@@ -33,11 +33,8 @@ router.route('/items')
   });
 });
 
-// on routes that end in /items/:item_id
-// ----------------------------------------------------
 router.route('/items/:item_id')
 
-// get the item with that id (accessed at GET http://localhost:8080/api/items/:item_id)
 .get(function(req, res) {
   TodoItem.findById(req.params.item_id).populate('tagRefs')
     .exec(function(err, item) {
@@ -48,7 +45,6 @@ router.route('/items/:item_id')
   });
 })
 
-// update the item with this id (accessed at PUT http://localhost:8080/api/items/:item_id)
 .put(function(req, res) {
   // use our item model to find the item we want
   TodoItem.findById(req.params.item_id)
